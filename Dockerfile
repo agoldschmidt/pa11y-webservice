@@ -28,6 +28,7 @@ RUN apt-get update \
    libglib2.0-0 \
    libgtk-3-0 \
    libnspr4 \
+   libnss3 \
    libpango-1.0-0 \
    libpangocairo-1.0-0 \
    libstdc++6 \
@@ -45,6 +46,7 @@ RUN apt-get update \
    libxss1 \
    libxtst6 \
    lsb-release \
+   wget \
    xdg-utils \
 && rm -rf /var/lib/apt/lists/* \
 && echo "progress = dot:giga" | tee /etc/wgetrc \
@@ -52,11 +54,18 @@ RUN apt-get update \
 && wget https://github.com/andmarios/duphard/releases/download/v1.0/duphard -O /bin/duphard \
 && chmod +x /bin/duphard
 
+# Create a non-root user and set the ownership of the working directory
+RUN useradd -m simpleuser \
+&& chown -R simpleuser:simpleuser /app
+
 # Clone the pa11y-webservice repository
 RUN git clone https://github.com/agoldschmidt/pa11y-webservice.git .
 
 # Install the dependencies
 RUN npm install
+
+# Switch to the non-root user
+USER simpleuser
 
 # Expose the port the app runs on
 EXPOSE 3000
