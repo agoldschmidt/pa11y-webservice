@@ -11,6 +11,7 @@ RUN apt-get update \
    wget \
    libnss3 \
    libgconf-2-4 \
+   xvfb \
 && rm -rf /var/lib/apt/lists/* \
 && echo "progress = dot:giga" | tee /etc/wgetrc \
 && mkdir -p /mnt /opt /data \
@@ -18,7 +19,7 @@ RUN apt-get update \
 && chmod +x /bin/duphard
 
 # Clone the pa11y-webservice repository
-RUN git clone https://github.com/agoldschmidt/pa11y-webservice.git .
+RUN git clone https://github.com/pa11y/pa11y-webservice.git .
 
 # Install the dependencies
 RUN npm install
